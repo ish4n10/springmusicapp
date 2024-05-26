@@ -19,8 +19,19 @@ class UserController(private val userRepository: UserRepository) {
     };
     @PostMapping("/user")
     fun initializeUser(@RequestBody userRequestModel: UserRequestModel): ResponseEntity<String> {
-        var userBuffer = UserService(userRequestModel, userRepository);
+        val userBuffer = UserService(userRequestModel, userRepository);
         userBuffer.initializeToRepository();
         return ResponseEntity.ok(userBuffer.toString())
     }
+//    @PatchMapping("/{id}")
+//    fun updateUser(
+//        @PathVariable id: String,
+//        @RequestBody userRequest: UserRequest
+//    ): ResponseEntity<String> {
+//        var userBuffer = UserService(userRequestModel, userRepository);
+//        val updatedUser = userService.updateUserName(id, userRequest.name)
+//        return ResponseEntity.ok(updatedUser.toString())
+//    }
+
+
 }
