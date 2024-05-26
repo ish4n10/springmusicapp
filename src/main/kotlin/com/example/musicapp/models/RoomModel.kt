@@ -41,10 +41,7 @@ public data class RoomModel(
         return true
     }
 
-    override fun hashCode(): Int {
-        var result = hostId.hashCode()
-        result = 31 * result + listOfUsers.contentHashCode()
-        result = 31 * result + queueList.contentHashCode()
-        return result
+    operator fun not(): Boolean {
+            return !(id.isEmpty() || hostId.isEmpty());
     }
 };
