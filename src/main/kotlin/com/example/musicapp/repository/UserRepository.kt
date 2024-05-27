@@ -10,3 +10,4 @@ public interface UserRepository : MongoRepository<User,String> {
     fun save(user: User);
 }
 
+

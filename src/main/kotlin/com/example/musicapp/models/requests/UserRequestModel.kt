@@ -11,3 +11,11 @@ data class UserRequestModel (
     public var password: String,
 )
 
+data class UserPatchRequestModel<T> (
+    @NotNull
+    public var op: String,
+    @NotNull
+    public var path: String,
+    @NotNull
+    public var value: T
+)
