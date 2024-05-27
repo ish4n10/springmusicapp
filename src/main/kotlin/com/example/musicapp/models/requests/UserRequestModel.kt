@@ -10,6 +10,10 @@ data class UserRequestModel (
     @NotNull
     public var password: String,
 )
+data class UserRequest(
+    @NotNull
+    val name: String?
+)
 
 data class UserPatchRequestModel<T> (
     @NotNull

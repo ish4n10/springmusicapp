@@ -34,4 +34,15 @@ class UserController(private val userRepository: UserRepository) {
         );
         return ResponseEntity.ok(response)
     }
+//    @PatchMapping("/{id}")
+//    fun updateUser(
+//        @PathVariable id: String,
+//        @RequestBody userRequest: UserRequest
+//    ): ResponseEntity<String> {
+//        var userBuffer = UserService(userRequestModel, userRepository);
+//        val updatedUser = userService.updateUserName(id, userRequest.name)
+//        return ResponseEntity.ok(updatedUser.toString())
+//    }
+
+
 }
