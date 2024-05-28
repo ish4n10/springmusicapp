@@ -2,23 +2,18 @@ package com.example.musicapp.services
 
 import com.example.musicapp.models.InitializeData
 import com.example.musicapp.models.RoomModel
-import com.example.musicapp.models.User
-import com.example.musicapp.models.UserStatus
-
 import com.example.musicapp.models.requests.RoomRequestModel
 
 import com.example.musicapp.repository.RoomRepository
-import java.time.LocalDateTime
 
 import java.util.*
 
-class RoomService(private val roomRequest: RoomRequestModel, private val roomRepository: RoomRepository) {
-    private var room: RoomModel;
+class RoomService( private val roomRepository: RoomRepository) {
     private fun getUid(): UUID {
         return UUID.randomUUID();
     }
 
-    init {
+    public fun initializeToRepository(roomRequest: RoomRequestModel): RoomModel {
         var id = getUid().toString();
         var hostId = roomRequest.hostId;
         var initializeData = InitializeData(creator = roomRequest.hostId, roomPassword = roomRequest.roomPassword);
@@ -27,14 +22,35 @@ class RoomService(private val roomRequest: RoomRequestModel, private val roomRep
         var initTs = java.time.LocalDateTime.now();
         var currentSongPlaying = "";
         var queueList = arrayOf<String>();
-
-        room = RoomModel(id, hostId, initializeData, listOfUser, status, initTs, currentSongPlaying, queueList);
-    };
-    public fun initializeToRepository(): RoomModel {
+      val   room = RoomModel(id, hostId, initializeData, listOfUser, status, initTs, currentSongPlaying, queueList);
         if (!room) {
             val roomResponse = roomRepository.insert(room);
             return roomResponse;
         }
         return {} as RoomModel;
+    }
+    public fun <T> roomPatchHandler(id: String, op: String, path: String, value: T): RoomModel {
+        when (op) {
+            "REPLACE" -> {
+                return roomUpdatePathHandler(id, path, value)
+            }
+            else -> {
+                throw Exception("Invalid Operation")
+            }
+        }
+    }
+    private fun <T> roomUpdatePathHandler(id: String, path: String, value: T): RoomModel {
+        val room =roomRepository.findById(id).get();
+        when (path) {
+            "hostId" -> {
+                room.hostId = value as String;
+            }
+            "status" -> {
+                room.status = value as String;
+            }
+        }
+        val response: RoomModel = roomRepository.save(room);
+        println(response);
+        return room;
     }
 }
