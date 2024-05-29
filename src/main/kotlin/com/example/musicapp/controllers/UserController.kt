@@ -1,5 +1,6 @@
 package com.example.musicapp.controllers
 
+import com.example.musicapp.models.RoomModel
 import com.example.musicapp.models.User
 import com.example.musicapp.models.requests.UserPatchRequestModel
 import com.example.musicapp.models.requests.UserRequestModel
@@ -19,11 +20,13 @@ class UserController(private val userRepository: UserRepository) {
         val userDetails = userRepository.findById(id);
         return userDetails;
     };
+
     @PostMapping("/user")
     fun initializeUser(@RequestBody userRequestModel: UserRequestModel): ResponseEntity<User> {
         var something = userServiceClass.initializeToRepository(userRequestModel);
         return ResponseEntity.ok(something)
     }
+
     @PatchMapping("/user/{id}")
     fun updateUserDetails(@PathVariable id: String, @RequestBody userPatchRequest: UserPatchRequestModel<String>) : ResponseEntity<User> {
         val response = userServiceClass.userPatchHandler(
@@ -34,15 +37,9 @@ class UserController(private val userRepository: UserRepository) {
         );
         return ResponseEntity.ok(response)
     }
-//    @PatchMapping("/{id}")
-//    fun updateUser(
-//        @PathVariable id: String,
-//        @RequestBody userRequest: UserRequest
-//    ): ResponseEntity<String> {
-//        var userBuffer = UserService(userRequestModel, userRepository);
-//        val updatedUser = userService.updateUserName(id, userRequest.name)
-//        return ResponseEntity.ok(updatedUser.toString())
-//    }
-
-
+    @DeleteMapping("/user/{id}")
+    fun deleteUser(@PathVariable id: String): ResponseEntity<User> {
+        userRepository.deleteById(id)
+        return ResponseEntity.noContent().build()
+    }
 }

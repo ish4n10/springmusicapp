@@ -7,6 +7,7 @@ import java.util.*
 
 public interface RoomRepository : MongoRepository<RoomModel,String> {
     override fun findById(id: String): Optional<RoomModel>;
+    override fun deleteById(id: String);
     fun existsUserById(id: String): Boolean;
     fun save(user: User);
 }

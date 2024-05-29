@@ -33,4 +33,10 @@ class RoomController(private val roomRepository: RoomRepository) {
         );
         return ResponseEntity.ok(response)
     }
+
+    @DeleteMapping("/room/{id}")
+    fun deleteRoom(@PathVariable id: String): ResponseEntity<RoomModel> {
+        roomRepository.deleteById(id)
+        return ResponseEntity.noContent().build()
+    }
 }

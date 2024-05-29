@@ -6,6 +6,7 @@ import java.util.*
 
 public interface UserRepository : MongoRepository<User,String> {
     override fun findById(id: String): Optional<User>;
+    override fun deleteById(id: String);
     fun existsUserById(id: String): Boolean;
     fun save(user: User);
 }
