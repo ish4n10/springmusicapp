@@ -6,6 +6,14 @@ import org.springframework.data.mongodb.core.mapping.MongoId
 import java.time.LocalDateTime
 import java.util.Date
 
+data class SmolUser (
+    @NotNull
+    public var id: String,
+    @NotNull
+    public var name: String,
+    @NotNull
+    public var phoneNumber: String
+)
 
 data class InitializeData(
     var creator: String,
@@ -22,7 +30,7 @@ public data class RoomModel(
 
     var initializeData: InitializeData,
 
-    var listOfUsers: Array<String>,
+    var listOfUsers: Array<SmolUser>,
     var status: String,
     var initTs: LocalDateTime,
     var currentSongPlaying: String,

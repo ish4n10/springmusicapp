@@ -1,5 +1,6 @@
 package com.example.musicapp.models.requests
 
+import com.example.musicapp.models.SmolUser
 import org.jetbrains.annotations.NotNull
 import org.springframework.data.annotation.Id
 
@@ -16,4 +17,10 @@ data class RoomPatchRequestModel<T> (
     public var path: String,
     @NotNull
     public var value: T
+)
+
+public data class RoomUpdateJoinRoom (
+    @NotNull
+    public var userData: SmolUser,
+    public var roomPassword: String,
 )

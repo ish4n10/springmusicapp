@@ -2,6 +2,7 @@ package com.example.musicapp.controllers
 import com.example.musicapp.models.RoomModel
 import com.example.musicapp.models.requests.RoomRequestModel
 import com.example.musicapp.models.requests.RoomPatchRequestModel
+import com.example.musicapp.models.requests.RoomUpdateJoinRoom
 import com.example.musicapp.repository.RoomRepository
 import com.example.musicapp.services.RoomService
 
@@ -13,18 +14,22 @@ class RoomController(private val roomRepository: RoomRepository) {
     var roomServiceClass = RoomService(roomRepository);
 
     @GetMapping("/room")
-    fun index(@RequestParam("id") id: String): Optional<RoomModel> {
+    fun getAllRooms(): MutableList<RoomModel> {
+        return roomRepository.findAll();
+    }
+    @GetMapping("/room/{id}")
+    fun getRoomById(@PathVariable id: String): Optional<RoomModel> {
         println(id);
         val roomDetails = roomRepository.findById(id);
         return roomDetails;
     };
     @PostMapping("/room")
-    fun initializeUser(@RequestBody roomRequestModel: RoomRequestModel): ResponseEntity<RoomModel> {
-      val something=roomServiceClass.initializeToRepository(roomRequestModel)
-        return ResponseEntity.ok(something);
+    fun initializeRoom(@RequestBody roomRequestModel: RoomRequestModel): ResponseEntity<RoomModel> {
+        val userData = roomServiceClass.initializeToRepository(roomRequestModel)
+        return ResponseEntity.ok(userData);
     }
     @PatchMapping("/room/{id}")
-    fun updateUserDetails(@PathVariable id: String, @RequestBody roomPatchRequest: RoomPatchRequestModel<String>) : ResponseEntity<RoomModel> {
+    fun updateRoomDetails(@PathVariable id: String, @RequestBody roomPatchRequest: RoomPatchRequestModel<String>) : ResponseEntity<RoomModel> {
         val response = roomServiceClass.roomPatchHandler(
             id = id,
             op = roomPatchRequest.op,
@@ -35,8 +40,15 @@ class RoomController(private val roomRepository: RoomRepository) {
     }
 
     @DeleteMapping("/room/{id}")
-    fun deleteRoom(@PathVariable id: String): ResponseEntity<RoomModel> {
-        roomRepository.deleteById(id)
-        return ResponseEntity.noContent().build()
+    fun deleteRoom(@PathVariable id: String): ResponseEntity<String> {
+        val response = roomRepository.deleteById(id)
+        return ResponseEntity.ok({"Deleted user of id $id"}.toString());
     }
+    //POST api/room/{room_id}/session
+    @PostMapping("/room/{id}/session")
+    fun updateRoomUsers(@PathVariable id: String, @RequestBody roomModel: RoomUpdateJoinRoom) : ResponseEntity<RoomModel> {
+        val response = roomServiceClass.addUserToRoom(id, roomModel);
+        return ResponseEntity.ok(response);
+    }
+
 }
