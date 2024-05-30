@@ -2,7 +2,9 @@ package com.example.musicapp.services
 
 import com.example.musicapp.models.InitializeData
 import com.example.musicapp.models.RoomModel
+import com.example.musicapp.models.SmolUser
 import com.example.musicapp.models.requests.RoomRequestModel
+import com.example.musicapp.models.requests.RoomUpdateJoinRoom
 
 import com.example.musicapp.repository.RoomRepository
 
@@ -17,7 +19,7 @@ class RoomService( private val roomRepository: RoomRepository) {
         var id = getUid().toString();
         var hostId = roomRequest.hostId;
         var initializeData = InitializeData(creator = roomRequest.hostId, roomPassword = roomRequest.roomPassword);
-        var listOfUser = arrayOf<String>();
+        var listOfUser = arrayOf<SmolUser>();
         var status = "online";
         var initTs = java.time.LocalDateTime.now();
         var currentSongPlaying = "";
@@ -52,5 +54,15 @@ class RoomService( private val roomRepository: RoomRepository) {
         val response: RoomModel = roomRepository.save(room);
         println(response);
         return room;
+    }
+    public fun addUserToRoom(id: String, roomRequest: RoomUpdateJoinRoom): RoomModel {
+        var roomdata = roomRepository.findById(id).get()
+        roomdata.listOfUsers += roomRequest.userData
+        roomRepository.save(roomdata);
+        return roomdata
+    }
+    public fun getUserFromRoom(id: String): RoomModel {
+        var roomdata = roomRepository.findById(id).get();
+        return roomdata
     }
 }

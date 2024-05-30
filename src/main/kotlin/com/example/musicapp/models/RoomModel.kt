@@ -12,6 +12,12 @@ data class InitializeData(
     var roomPassword: String,
 );
 
+data class SmolUser(
+    var id: String,
+    var name: String,
+    var phoneNumber:String
+)
+
 public data class RoomModel(
     @MongoId
     @NotNull
@@ -22,7 +28,7 @@ public data class RoomModel(
 
     var initializeData: InitializeData,
 
-    var listOfUsers: Array<String>,
+    var listOfUsers: Array<SmolUser>,
     var status: String,
     var initTs: LocalDateTime,
     var currentSongPlaying: String,
