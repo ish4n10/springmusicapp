@@ -35,7 +35,6 @@ public data class RoomModel(
     var initTs: LocalDateTime,
     var currentSongPlaying: String,
     var queueList: Array<String>,
-
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -49,5 +48,7 @@ public data class RoomModel(
     operator fun not(): Boolean {
             return !(id.isEmpty() || hostId.isEmpty());
     }
+
+
 };
 

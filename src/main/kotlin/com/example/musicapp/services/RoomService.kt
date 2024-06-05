@@ -10,7 +10,9 @@ import com.example.musicapp.repository.RoomRepository
 
 import java.util.*
 
-class RoomService( private val roomRepository: RoomRepository) {
+
+
+class RoomService(private val roomRepository: RoomRepository) {
     private fun getUid(): UUID {
         return UUID.randomUUID();
     }
@@ -62,4 +64,22 @@ class RoomService( private val roomRepository: RoomRepository) {
         roomRepository.save(roomData);
         return roomData;
     }
+//      fun deleteUserFromRoom(id: String, roomRemoveUserRequest: RoomUpdateJoinRoom ): RoomModel {
+//        var roomData = roomRepository.findById(id).get();
+//         RoomModel.listOfUsers
+//        listOfUsers.Remove(roomRemoveUserRequest.userData);
+//        roomRepository.save(roomData);
+//        return roomData;
+//    }
+
+    fun deleteUserFromRoom(roomId: String, userId: String ): RoomModel {
+        var roomData = roomRepository.findById(roomId).get();
+        roomData.listOfUsers = roomData.listOfUsers.filterNot { it.id == userId }.toTypedArray();
+        roomRepository.save(roomData);
+        return roomData;
+    }
+}
+
+private fun <T> Array<T>.drop(id: String) {
+
 }

@@ -1,9 +1,11 @@
 package com.example.musicapp.controllers
 import com.example.musicapp.models.RoomModel
+import com.example.musicapp.models.requests.AddMusicToRoom
 import com.example.musicapp.models.requests.RoomRequestModel
 import com.example.musicapp.models.requests.RoomPatchRequestModel
 import com.example.musicapp.models.requests.RoomUpdateJoinRoom
 import com.example.musicapp.repository.RoomRepository
+import com.example.musicapp.repository.UserRepository
 import com.example.musicapp.services.RoomService
 
 import org.springframework.http.ResponseEntity
@@ -50,5 +52,29 @@ class RoomController(private val roomRepository: RoomRepository) {
         val response = roomServiceClass.addUserToRoom(id, roomModel);
         return ResponseEntity.ok(response);
     }
+//DELETE api/room/{room_id}/session/{user_id}
+    @DeleteMapping("/{roomId}/session/{userId}")
+    fun deleteUser(@PathVariable roomId: String, @PathVariable userId: String  ): ResponseEntity<String> {
+        val response = roomServiceClass.deleteUserFromRoom(roomId,userId);
+        return ResponseEntity.ok({"Deleted user of id $userId"}.toString());
+
+
+    }
+//    GET api/room/{room_id}/session/queue
+      @GetMapping("/{roomId}/queue")
+      fun getsonglist(@PathVariable roomId: String ) : Array<String> {
+      val response = roomRepository.findById(roomId).get()
+      return response.queueList
+
+
+    }
+//    POST api/room/{room_id}/session/queue
+    @PostMapping("/room/{roomId}/queue")
+    fun addsong(@PathVariable roomId: String, @RequestBody body: AddMusicToRoom): RoomModel {
+        val response = roomRepository.findById(roomId).get()
+         response.queueList += body.songId
+          roomRepository.save(response)
+          return response
+}
 
 }
