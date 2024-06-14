@@ -10,7 +10,9 @@ import com.example.musicapp.repository.RoomRepository
 
 import java.util.*
 
-class RoomService( private val roomRepository: RoomRepository) {
+
+
+class RoomService(private val roomRepository: RoomRepository) {
     private fun getUid(): UUID {
         return UUID.randomUUID();
     }
@@ -24,7 +26,7 @@ class RoomService( private val roomRepository: RoomRepository) {
         var initTs = java.time.LocalDateTime.now();
         var currentSongPlaying = "";
         var queueList = arrayOf<String>();
-      val   room = RoomModel(id, hostId, initializeData, listOfUser, status, initTs, currentSongPlaying, queueList);
+        val room = RoomModel(id, hostId, initializeData, listOfUser, status, initTs, currentSongPlaying, queueList);
         if (!room) {
             val roomResponse = roomRepository.insert(room);
             return roomResponse;
@@ -42,7 +44,7 @@ class RoomService( private val roomRepository: RoomRepository) {
         }
     }
     private fun <T> roomUpdatePathHandler(id: String, path: String, value: T): RoomModel {
-        val room =roomRepository.findById(id).get();
+        val room = roomRepository.findById(id).get();
         when (path) {
             "hostId" -> {
                 room.hostId = value as String;
